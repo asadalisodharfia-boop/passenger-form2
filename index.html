@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Passenger Details Form for Facilitation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans', sans-serif;
+      background: #f0f2f5;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 24px 16px 60px;
+      color: #1a2332;
+    }
+
+    .form-wrapper {
+      width: 100%;
+      max-width: 640px;
+    }
+
+    .form-header {
+      background: linear-gradient(135deg, #0d3b2e 0%, #145a3e 100%);
+      border-radius: 12px 12px 0 0;
+      padding: 32px 28px 24px;
+      text-align: center;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .form-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #c4a44a, #e2c97e, #c4a44a);
+    }
+    .form-header .logo {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 14px;
+      font-size: 28px; font-weight: 700;
+      letter-spacing: 1px;
+      border: 2px solid rgba(255,255,255,0.2);
+    }
+    .form-header h1 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      letter-spacing: 0.3px;
+    }
+    .form-header p {
+      font-size: 13px;
+      opacity: 0.85;
+      line-height: 1.5;
+    }
+
+    .form-body {
+      background: #ffffff;
+      padding: 28px;
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    .field-group { margin-bottom: 20px; }
+    .field-row { display: flex; gap: 14px; }
+    .field-row .field-group { flex: 1; }
+
+    label {
+      display: block;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 6px;
+    }
+    label .req { color: #c0392b; margin-left: 2px; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid #d5dbe3;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      color: #1a2332;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background: #fafbfc;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #145a3e;
+      box-shadow: 0 0 0 3px rgba(20,90,62,0.1);
+      background: #fff;
+    }
+    textarea { resize: vertical; min-height: 80px; }
+
+    .radio-group { display: flex; gap: 12px; margin-top: 4px; }
+    .radio-option { flex: 1; }
+    .radio-option input[type="radio"] { display: none; }
+    .radio-option label.radio-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+      border: 1.5px solid #d5dbe3;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 14px;
+      transition: all 0.2s;
+      background: #fafbfc;
+    }
+    .radio-option input[type="radio"]:checked + label.radio-label {
+      border-color: #145a3e;
+      background: #eaf5ef;
+      color: #0d3b2e;
+      box-shadow: 0 0 0 3px rgba(20,90,62,0.1);
+    }
+    .radio-option label.radio-label:hover { border-color: #a0b0a8; }
+
+    .datetime-row { display: flex; gap: 14px; }
+    .datetime-row .field-group:first-child { flex: 1.2; }
+    .datetime-row .field-group:last-child { flex: 0.8; }
+
+    .submit-btn {
+      width: 100%;
+      padding: 13px 24px;
+      background: linear-gradient(135deg, #075e54, #128c7e);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.3px;
+      transition: opacity 0.2s, transform 0.1s;
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .submit-btn:hover { opacity: 0.92; }
+    .submit-btn:active { transform: scale(0.99); }
+    .submit-btn svg { width: 20px; height: 20px; fill: #fff; }
+
+    .status-msg {
+      text-align: center;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      margin-top: 16px;
+      display: none;
+    }
+    .status-msg.error {
+      display: block;
+      background: #fdf0ef;
+      color: #922820;
+      border: 1px solid #e8c4c0;
+    }
+
+    .helper-text { font-size: 12px; color: #7a8a9e; margin-top: 4px; }
+
+    .whatsapp-note {
+      text-align: center;
+      margin-top: 12px;
+      font-size: 12.5px;
+      color: #6b7c8f;
+      line-height: 1.5;
+    }
+
+    .form-footer {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 12px;
+      color: #8a95a5;
+    }
+
+    @media (max-width: 520px) {
+      .field-row, .datetime-row { flex-direction: column; gap: 0; }
+      .form-body { padding: 20px 18px; }
+      .form-header { padding: 24px 18px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="form-wrapper">
+  <div class="form-header">
+    <div class="logo">FIA</div>
+    <h1>Passenger Details Form for Facilitation</h1>
+    <p>Please provide your details to request queue-free processing at FIA Immigration.</p>
+  </div>
+
+  <div class="form-body">
+    <form id="passengerForm" novalidate>
+
+      <div class="field-row">
+        <div class="field-group">
+          <label>First Name <span class="req">*</span></label>
+          <input type="text" id="firstName" required placeholder="First Name">
+        </div>
+        <div class="field-group">
+          <label>Last Name <span class="req">*</span></label>
+          <input type="text" id="lastName" required placeholder="Last Name">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Email Address <span class="req">*</span></label>
+        <input type="email" id="email" required placeholder="example@example.com">
+      </div>
+
+      <div class="field-group">
+        <label>Phone Number <span class="req">*</span></label>
+        <input type="tel" id="phone" required placeholder="+92 3XX XXXXXXX">
+      </div>
+
+      <div class="field-group">
+        <label>Flight Number <span class="req">*</span></label>
+        <input type="text" id="flightNumber" required placeholder="e.g. PK-308">
+      </div>
+
+      <div class="field-group">
+        <label>Airline Name <span class="req">*</span></label>
+        <input type="text" id="airlineName" required placeholder="e.g. Pakistan International Airlines">
+      </div>
+
+      <div class="datetime-row">
+        <div class="field-group">
+          <label>Date <span class="req">*</span></label>
+          <input type="date" id="flightDate" required>
+        </div>
+        <div class="field-group">
+          <label>Time <span class="req">*</span></label>
+          <input type="time" id="flightTime" required>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Arrival or Departure <span class="req">*</span></label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" name="travelType" id="arrival" value="Arrival" required>
+            <label for="arrival" class="radio-label">Arrival</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="travelType" id="departure" value="Departure">
+            <label for="departure" class="radio-label">Departure</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Reference Person (Name and Designation) <span class="req">*</span></label>
+        <input type="text" id="referencePerson" required placeholder="Name and designation of the referring person/department">
+        <div class="helper-text">Please mention the name and designation of the person/department through whom this request is being made.</div>
+      </div>
+
+      <div class="field-group">
+        <label>Number of Accompanying Passengers (if any) <span class="req">*</span></label>
+        <input type="number" id="accompanyingCount" required min="0" placeholder="0">
+      </div>
+
+      <div class="field-group">
+        <label>Additional Requests or Comments</label>
+        <textarea id="comments" placeholder="Any additional information or special requests..."></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Submit via WhatsApp
+      </button>
+
+      <div class="whatsapp-note">
+        After clicking Submit, WhatsApp will open with your details pre-filled.<br>
+        Simply tap <strong>Send</strong> to complete your submission.
+      </div>
+
+      <div id="statusMsg" class="status-msg"></div>
+    </form>
+  </div>
+
+  <div class="form-footer">
+    Federal Investigation Agency &mdash; Immigration Facilitation
+  </div>
+</div>
+
+<!-- Hidden iframe for silent Google Sheet submission -->
+<iframe id="hiddenFrame" name="hiddenFrame" style="display:none;"></iframe>
+
+<script>
+  // ============================================================
+  // CONFIGURATION
+  // ============================================================
+  var WHATSAPP_NUMBER = '923332135088';
+  var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzyUZlnGwD7c4n20pXLCHWCMNZ1sPSrNY6Uba46nU0pXj3iNc3Vt6CuLD91Rm93mBuAsA/exec';
+  // ============================================================
+
+  var form = document.getElementById('passengerForm');
+  var statusMsg = document.getElementById('statusMsg');
+
+  function showError(message) {
+    statusMsg.className = 'status-msg error';
+    statusMsg.textContent = message;
+  }
+
+  function formatDate(dateStr) {
+    if (!dateStr) return '';
+    var d = new Date(dateStr + 'T00:00:00');
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  function formatTime(timeStr) {
+    if (!timeStr) return '';
+    var parts = timeStr.split(':');
+    var hour = parseInt(parts[0]);
+    var min = parts[1];
+    var ampm = hour >= 12 ? 'PM' : 'AM';
+    var h12 = hour % 12 || 12;
+    return h12 + ':' + min + ' ' + ampm;
+  }
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    statusMsg.className = 'status-msg';
+    statusMsg.style.display = 'none';
+
+    // Validate
+    var requiredFields = form.querySelectorAll('[required]');
+    var valid = true;
+    var radioChecked = form.querySelector('input[name="travelType"]:checked');
+
+    for (var i = 0; i < requiredFields.length; i++) {
+      var f = requiredFields[i];
+      if (f.type === 'radio') {
+        if (!radioChecked) valid = false;
+      } else if (!f.value.trim()) {
+        valid = false;
+        f.style.borderColor = '#c0392b';
+        (function(field) {
+          field.addEventListener('input', function() { field.style.borderColor = ''; }, { once: true });
+        })(f);
+      }
+    }
+
+    if (!valid) {
+      showError('Please fill in all required fields.');
+      return;
+    }
+
+    // Collect values
+    var firstName = document.getElementById('firstName').value.trim();
+    var lastName = document.getElementById('lastName').value.trim();
+    var email = document.getElementById('email').value.trim();
+    var phone = document.getElementById('phone').value.trim();
+    var flightNumber = document.getElementById('flightNumber').value.trim();
+    var airlineName = document.getElementById('airlineName').value.trim();
+    var flightDate = formatDate(document.getElementById('flightDate').value);
+    var flightTime = formatTime(document.getElementById('flightTime').value);
+    var travel = radioChecked ? radioChecked.value : '';
+    var referencePerson = document.getElementById('referencePerson').value.trim();
+    var accompanyingCount = document.getElementById('accompanyingCount').value.trim();
+    var comments = document.getElementById('comments').value.trim();
+
+    // -------------------------------------------------------
+    // STEP 1: Save to Google Sheet silently via hidden form
+    // -------------------------------------------------------
+    if (GOOGLE_SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+      var fields = {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        phone: phone,
+        flightNumber: flightNumber,
+        airlineName: airlineName,
+        flightDate: flightDate,
+        flightTime: flightTime,
+        travel: travel,
+        referencePerson: referencePerson,
+        accompanyingCount: accompanyingCount,
+        comments: comments
+      };
+
+      var hiddenForm = document.createElement('form');
+      hiddenForm.method = 'POST';
+      hiddenForm.action = GOOGLE_SCRIPT_URL;
+      hiddenForm.target = 'hiddenFrame';
+      hiddenForm.style.display = 'none';
+
+      var keys = Object.keys(fields);
+      for (var j = 0; j < keys.length; j++) {
+        var inp = document.createElement('input');
+        inp.type = 'hidden';
+        inp.name = keys[j];
+        inp.value = fields[keys[j]];
+        hiddenForm.appendChild(inp);
+      }
+
+      document.body.appendChild(hiddenForm);
+      hiddenForm.submit();
+      document.body.removeChild(hiddenForm);
+    }
+
+    // -------------------------------------------------------
+    // STEP 2: Open WhatsApp with pre-filled message
+    // -------------------------------------------------------
+    var msg = '*PASSENGER FACILITATION REQUEST (' + travel + ')*\n';
+    msg += '================================\n\n';
+    msg += '*Name:* ' + firstName + ' ' + lastName + '\n';
+    msg += '*Email:* ' + email + '\n';
+    msg += '*Phone:* ' + phone + '\n';
+    msg += '*Flight:* ' + flightNumber + '\n';
+    msg += '*Airline:* ' + airlineName + '\n';
+    msg += '*Date:* ' + flightDate + '\n';
+    msg += '*Time:* ' + flightTime + '\n';
+    msg += '*Reference:* ' + referencePerson + '\n';
+    msg += '*Accompanying Passengers:* ' + accompanyingCount + '\n';
+
+    if (comments) {
+      msg += '*Comments:* ' + comments + '\n';
+    }
+
+    msg += '\n================================';
+
+    var waUrl = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(msg);
+    window.open(waUrl, '_blank');
+  });
+</script>
+
+</body>
+</html>
